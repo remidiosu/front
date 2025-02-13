@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Telegram Mini App</title>
+  <!-- Load Telegram WebApp script -->
+  <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
+</head>
+<body>
+  <h1>Telegram Mini App</h1>
+  <p>This mini app sends Telegram initData to your backend for validation.</p>
+  <button id="validateButton">Validate Telegram Data</button>
+
+  <script>
+    document.getElementById('validateButton').addEventListener('click', function () {
+      // Get the initData from the Telegram WebApp object.
+      const initData = window.Telegram.WebApp.initData;
+
+      if (!initData) {
+        alert("Telegram initData not found. Make sure you're running this inside Telegram.");
+        return;
+      }
+
+      // Send the initData to your backend endpoint.
+      fetch("https://potential-disco-jp6vj45jw97h5vr-8000.app.github.dev/validate-telegram-data", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ initData: initData })
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log("Validation result:", data);
+        alert("Validation result: " + JSON.stringify(data));
+      })
+      .catch(error => {
+        console.error("Error validating data:", error);
+        alert("Error validating data. Check console for details.");
+      });
+    });
+  </script>
+</body>
+</html>
